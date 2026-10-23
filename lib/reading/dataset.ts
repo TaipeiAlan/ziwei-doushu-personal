@@ -18,10 +18,32 @@ export const READING_YEAR_RANGE = [1950, 2026] as const;
 
 const BASE = `${process.env.NEXT_PUBLIC_BASE_PATH ?? ''}/reading-v4`;
 
+/**
+ * 按行存放的 UTF-8 文字。共用行解压后约 70 MB，整份转成 JS 字串太占内存，
+ * 所以只记下每行的起点，用到哪行才解码哪行。
+ */
+class LineTable {
+  private starts: Uint32Array;
+  private decoder = new TextDecoder();
+
+  constructor(private bytes: Uint8Array) {
+    let count = 1;
+    for (let i = 0; i < bytes.length; i++) if (bytes[i] === 10) count++;
+    this.starts = new Uint32Array(count + 1);
+    let k = 1;
+    for (let i = 0; i < bytes.length; i++) if (bytes[i] === 10) this.starts[k++] = i + 1;
+    this.starts[count] = bytes.length + 1;
+  }
+
+  get(i: number): string {
+    return this.decoder.decode(this.bytes.subarray(this.starts[i], this.starts[i + 1] - 1));
+  }
+}
+
 interface YearShard {
   /** 键 `${月}-${日}-${时辰}-${性别0/1}` → [命宫主星, 正文偏移] */
   index: Map<string, [string | null, number]>;
-  local: string[];
+  local: LineTable;
   body: Uint8Array;
 }
 
@@ -41,11 +63,11 @@ function checkMagic(buf: Uint8Array, magic: string) {
   if (String.fromCharCode(...buf.subarray(0, 4)) !== magic) throw new Error('数据档格式不符');
 }
 
-let commonPromise: Promise<string[]> | null = null;
-function loadCommon(): Promise<string[]> {
+let commonPromise: Promise<LineTable> | null = null;
+function loadCommon(): Promise<LineTable> {
   commonPromise ??= fetchZst('common.zst').then(buf => {
     checkMagic(buf, 'ZWC1');
-    return new TextDecoder().decode(buf.subarray(4)).split('\n');
+    return new LineTable(buf.subarray(4));
   });
   commonPromise.catch(() => { commonPromise = null; });
   return commonPromise;
@@ -66,7 +88,7 @@ function loadYear(year: number): Promise<YearShard> {
       };
       at += headLen;
       const localLen = view.getUint32(at, true); at += 4;
-      const local = dec.decode(buf.subarray(at, at + localLen)).split('\n');
+      const local = new LineTable(buf.subarray(at, at + localLen));
       at += localLen;
       const index = new Map<string, [string | null, number]>();
       for (const [m, d, h, g, ms, off] of header.charts) index.set(`${m}-${d}-${h}-${g}`, [ms, off]);
@@ -98,7 +120,7 @@ export async function getReading(info: BirthInfo): Promise<Reading | null> {
     const lines: string[] = [];
     for (let k = 0; k < n; k++) {
       const ref = varint();
-      lines.push(ref % 2 ? local[(ref - 1) / 2] : common[ref / 2]);
+      lines.push(ref % 2 ? local.get((ref - 1) / 2) : common.get(ref / 2));
     }
     topics[t] = lines.join('\n');
   }

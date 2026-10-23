@@ -69,19 +69,19 @@ export default function DatasetReading({ chart }: { chart: ZiweiChart }) {
     <section className="card-glass rounded-xl" style={{ padding: 20, marginTop: 20 }}>
       <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', marginBottom: 12 }}>
         <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--tx-0)', letterSpacing: '0.1em' }}>命盘解读</h2>
-        <span style={{ fontSize: 11, color: 'var(--tx-3)' }}>v4.0 解读数据集 · 13 个主题</span>
+        <span style={{ fontSize: 11, color: 'var(--tx-3)' }}>v4.0 解读资料集 · 13 个主题</span>
       </div>
 
       {state.status === 'loading' && (
-        <p style={{ fontSize: 13, color: 'var(--tx-2)' }}>正在载入 {info.year} 年的解读数据…</p>
+        <p style={{ fontSize: 13, color: 'var(--tx-2)' }}>正在载入 {info.year} 年的解读资料…</p>
       )}
       {state.status === 'error' && (
-        <p style={{ fontSize: 13, color: 'var(--tx-2)' }}>解读数据载入失败：{state.message}</p>
+        <p style={{ fontSize: 13, color: 'var(--tx-2)' }}>解读资料载入失败：{state.message}</p>
       )}
       {state.status === 'none' && (
         <p style={{ fontSize: 13, color: 'var(--tx-2)', lineHeight: 1.8 }}>
-          解读数据集只涵盖 {READING_YEAR_RANGE[0]}–{READING_YEAR_RANGE[1]} 年出生的命盘，这张盘不在范围内。
-          上方的格局识别与星曜说明仍可参考。
+          解读资料集只涵盖 {READING_YEAR_RANGE[0]}–{READING_YEAR_RANGE[1]} 年出生的命盘，这张盘不在范围内。
+          本页的格局识别与星曜说明仍可参考。
         </p>
       )}
 
@@ -106,7 +106,7 @@ export default function DatasetReading({ chart }: { chart: ZiweiChart }) {
           </div>
           {mismatch && (
             <p style={{ fontSize: 12, color: 'var(--tx-2)', marginBottom: 12, lineHeight: 1.7 }}>
-              ⚠ 数据集记录的命宫主星为「{state.reading.mingStar ?? '空宫'}」，与本页排出的「{ourMingStar ?? '空宫'}」不同，解读可能对不上这张盘，请谨慎参考。
+              ⚠ 资料集记录的命宫主星为「{state.reading.mingStar ?? '空宫'}」，与本页排出的「{ourMingStar ?? '空宫'}」不同，解读可能对不上这张盘，请谨慎参考。
             </p>
           )}
           <ReadingText text={state.reading.topics[topic]} />
@@ -114,8 +114,8 @@ export default function DatasetReading({ chart }: { chart: ZiweiChart }) {
       )}
 
       <p style={{ fontSize: 11, color: 'var(--tx-3)', marginTop: 20, lineHeight: 1.7 }}>
-        解读内容来自 Renhuai123/ziwei-doushu 公开的解读数据集 v4.0（CC BY 4.0；其中倪海厦《天纪》引文适用 CC BY-NC-SA 4.0）。
-        查询时只会向本站下载出生年份的数据档，不会上传其他出生资料。
+        解读内容来自 Renhuai123/ziwei-doushu 公开的解读资料集 v4.0（CC BY 4.0；其中倪海厦《天纪》引文适用 CC BY-NC-SA 4.0）。
+        查询时只会向本站下载出生年份的资料档，不会上传其他出生资料。
       </p>
     </section>
   );
