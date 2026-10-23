@@ -20,19 +20,6 @@ export const metadata: Metadata = {
     locale: 'zh_TW',
     type: 'website',
   },
-  // 站长平台验证（拿到 verification code 后填入对应字段，重新部署即可）
-  verification: {
-    // Google Search Console: 在 https://search.google.com/search-console 添加站点后获取
-    google: process.env.NEXT_PUBLIC_GOOGLE_VERIFICATION || undefined,
-    // Bing Webmaster Tools: 在 https://www.bing.com/webmasters 添加站点后获取
-    other: {
-      'msvalidate.01': process.env.NEXT_PUBLIC_BING_VERIFICATION || '808FFC6023A2C359B375DD860FEDA856',
-      // 百度站长（等执照下来后）
-      'baidu-site-verification': process.env.NEXT_PUBLIC_BAIDU_VERIFICATION || '',
-      // 360 站长（等执照下来后）
-      '360-site-verification': process.env.NEXT_PUBLIC_360_VERIFICATION || '',
-    },
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
