@@ -9,7 +9,8 @@
  * 由 npm run build 前的 prebuild 自动执行；原始码文字有变动时重新产生即可。
  */
 
-import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { zstdDecompressSync } from 'node:zlib';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -37,7 +38,23 @@ const files = [
   ...['app', 'components', 'lib'].flatMap(d => walk(join(ROOT, d), ['.ts', '.tsx'])),
   ...walk(join(ROOT, 'node_modules/iztro/lib/i18n/locales/zh-CN'), ['.js', '.json']),
 ];
-const corpus = files.map(f => readFileSync(f, 'utf8')).join('\n');
+// 解读数据集（public/reading-v4/*.zst，见 scripts/build-reading-dataset.mjs）的文字也要涵盖，
+// 否则数据集里独有的词组只能逐字转换
+const READING_DIR = join(ROOT, 'public/reading-v4');
+function readingLines(buf) {
+  const magic = buf.subarray(0, 4).toString();
+  if (magic === 'ZWC1') return buf.subarray(4).toString('utf8');
+  // ZWR1：只取「本年独有的行」，跳过头 JSON 与二进制正文
+  const headLen = buf.readUInt32LE(4);
+  const at = 8 + headLen;
+  return buf.subarray(at + 4, at + 4 + buf.readUInt32LE(at)).toString('utf8');
+}
+const readingText = existsSync(READING_DIR)
+  ? readdirSync(READING_DIR).filter(n => n.endsWith('.zst'))
+    .map(n => readingLines(zstdDecompressSync(readFileSync(join(READING_DIR, n)))))
+  : [];
+
+const corpus = [...files.map(f => readFileSync(f, 'utf8')), ...readingText].join('\n');
 
 // 紫微斗数用语与台湾惯用字的修正（OpenCC 预设：斗→鬥、干→幹、台→臺、冲→衝）
 const OVERRIDES = [
