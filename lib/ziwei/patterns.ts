@@ -15,7 +15,7 @@
  *  - 倪师《天纪》紫微斗数讲义
  */
 
-import 'server-only';
+// 原站标 server-only（不让格局规则进前端包）；GitHub Pages 版没有服务端，格局识别改在浏览器里算
 import type { ZiweiChart, Palace, Star } from './types';
 
 // ────────────────── 类型 ──────────────────
