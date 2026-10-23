@@ -4,6 +4,7 @@ import BirthForm from '@/components/BirthForm';
 import ChartBoard from '@/components/ChartBoard';
 import ChartSummary from '@/components/ChartSummary';
 import DatasetReading from '@/components/DatasetReading';
+import Modal from '@/components/Modal';
 import StarDetailPanel from '@/components/StarDetailPanel';
 import TimeNav, { type TimeView } from '@/components/TimeNav';
 import { generateChart } from '@/lib/ziwei/algorithm';
@@ -77,15 +78,19 @@ export default function ChartPage() {
           />
           <DatasetReading chart={chart} />
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
-          <StarDetailPanel
-            star={selectedStar?.star ?? null}
-            palaceName={selectedStar?.palace.name}
-            onClose={() => setSelectedStar(null)}
-          />
+        <div style={{ minWidth: 0 }}>
           <ChartSummary chart={chart} />
         </div>
       </div>
+
+      {/* 点星曜弹出说明，不占版面、不必捲动去找 */}
+      <Modal open={!!selectedStar} onClose={() => setSelectedStar(null)} width={520} bare>
+        <StarDetailPanel
+          star={selectedStar?.star ?? null}
+          palaceName={selectedStar?.palace.name}
+          onClose={() => setSelectedStar(null)}
+        />
+      </Modal>
     </main>
   );
 }
