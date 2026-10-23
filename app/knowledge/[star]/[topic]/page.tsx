@@ -32,6 +32,8 @@ export const dynamicParams = false;
 
 export async function generateStaticParams() {
   const routes = getAllKnowledgeRoutes();
+  // 开源版解读库是占位，routes 为空；静态导出要求至少一条，放一条会走 notFound() 的占位路由
+  if (routes.length === 0) return [{ star: '_', topic: '_' }];
   // URL 用拼音 slug 替代中文，避开 Vercel/CDN 中文路由边界问题
   return routes.map(r => ({ star: r.slug, topic: r.topic }));
 }
