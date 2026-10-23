@@ -3,6 +3,7 @@ import { useState } from 'react';
 import BirthForm from '@/components/BirthForm';
 import ChartBoard from '@/components/ChartBoard';
 import ChartSummary from '@/components/ChartSummary';
+import DatasetReading from '@/components/DatasetReading';
 import StarDetailPanel from '@/components/StarDetailPanel';
 import TimeNav, { type TimeView } from '@/components/TimeNav';
 import { generateChart } from '@/lib/ziwei/algorithm';
@@ -62,7 +63,7 @@ export default function ChartPage() {
         onYearChange={setLiunianYear}
       />
 
-      {/* 纯静态版本：解析全部在浏览器里由规则计算（格局识别、命宫摘要、四化、星曜说明），不接 AI 接口 */}
+      {/* 纯静态版本：解析全部在浏览器里完成（规则解析 + v4.0 解读数据集），不接 AI 接口 */}
       <style>{`
         .chart-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 20px; margin-top: 16px; align-items: start; }
         @media (max-width: 1000px) { .chart-layout { grid-template-columns: minmax(0, 1fr); } }
@@ -74,6 +75,7 @@ export default function ChartPage() {
             onPalaceSelect={setSelectedPalace}
             onStarSelect={(star, palace) => setSelectedStar({ star, palace })}
           />
+          <DatasetReading chart={chart} />
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
           <StarDetailPanel

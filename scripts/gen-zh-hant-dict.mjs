@@ -9,7 +9,8 @@
  * 由 npm run build 前的 prebuild 自动执行；原始码文字有变动时重新产生即可。
  */
 
-import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { zstdDecompressSync } from 'node:zlib';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -37,7 +38,23 @@ const files = [
   ...['app', 'components', 'lib'].flatMap(d => walk(join(ROOT, d), ['.ts', '.tsx'])),
   ...walk(join(ROOT, 'node_modules/iztro/lib/i18n/locales/zh-CN'), ['.js', '.json']),
 ];
-const corpus = files.map(f => readFileSync(f, 'utf8')).join('\n');
+// 解读数据集（public/reading-v4/*.zst，见 scripts/build-reading-dataset.mjs）的文字也要涵盖，
+// 否则数据集里独有的词组只能逐字转换
+const READING_DIR = join(ROOT, 'public/reading-v4');
+function readingLines(buf) {
+  const magic = buf.subarray(0, 4).toString();
+  if (magic === 'ZWC1') return buf.subarray(4).toString('utf8');
+  // ZWR1：只取「本年独有的行」，跳过头 JSON 与二进制正文
+  const headLen = buf.readUInt32LE(4);
+  const at = 8 + headLen;
+  return buf.subarray(at + 4, at + 4 + buf.readUInt32LE(at)).toString('utf8');
+}
+const readingText = existsSync(READING_DIR)
+  ? readdirSync(READING_DIR).filter(n => n.endsWith('.zst'))
+    .map(n => readingLines(zstdDecompressSync(readFileSync(join(READING_DIR, n)))))
+  : [];
+
+const corpus = [...files.map(f => readFileSync(f, 'utf8')), ...readingText].join('\n');
 
 // 紫微斗数用语与台湾惯用字的修正（OpenCC 预设：斗→鬥、干→幹、台→臺、冲→衝）
 const OVERRIDES = [
@@ -45,13 +62,39 @@ const OVERRIDES = [
   '台湾 台灣', '台辅 台輔',
   '冲动 衝動', '冲突 衝突', '冲击 衝擊', '冲劲 衝勁', '冲任 衝任', '气冲 氣衝', '上冲 上衝',
 ];
-// 「年干起紫微」会被切成「干起 → 幹起」，直接去掉
-const DROPPED = ['干起'];
+// 「年干起紫微」会被切成「干起 → 幹起」、「一直发酵」会被切成「直发 → 直髮」，直接去掉
+const DROPPED = ['干起', '直发'];
 const overridden = new Set([...OVERRIDES, ...DROPPED].map(e => e.split(' ')[0]));
 const keep = entry => !overridden.has(entry.split(' ')[0]);
 
-const phrases = loadDict('STPhrases')
-  .filter(entry => keep(entry) && corpus.includes(entry.split(' ')[0]))
+// 语料有几十 MB，不能逐条 includes；改为扫一遍语料，按「首字 → 可能的词长」查表
+function phrasesInCorpus(keys, text) {
+  const byFirst = new Map();
+  for (const k of keys) {
+    const lens = byFirst.get(k[0]) ?? new Set();
+    lens.add(k.length);
+    byFirst.set(k[0], lens);
+  }
+  const keySet = new Set(keys);
+  const found = new Set();
+  for (let i = 0; i < text.length; i++) {
+    const lens = byFirst.get(text[i]);
+    if (!lens) continue;
+    for (const n of lens) {
+      const sub = text.substr(i, n);
+      if (keySet.has(sub)) found.add(sub);
+    }
+  }
+  return found;
+}
+
+const allPhrases = loadDict('STPhrases').filter(keep);
+const used = phrasesInCorpus(allPhrases.map(e => e.split(' ')[0]), corpus);
+const phrases = allPhrases
+  .filter(entry => used.has(entry.split(' ')[0]))
+  // 「别只/是只…」会把副词「只」误转成量词「隻」；「意面/和面…」会把「面子、面皮」转成「麵」。
+  // 解读文字里几乎不会用到量词隻与食物麵，这两类词组直接不用
+  .filter(entry => !/[隻麵麪]/.test(entry.split(' ')[1]))
   // 台湾惯用「台」（平台、台北、三台），不用「臺」
   .map(entry => entry.replace(/臺/g, '台'));
 const stage1 = [...phrases, ...loadDict('STCharacters').filter(keep), ...OVERRIDES].join('|');

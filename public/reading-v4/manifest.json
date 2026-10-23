@@ -1,0 +1,26 @@
+{
+ "source": "https://github.com/Renhuai123/ziwei-doushu/releases/tag/v4.0-13d",
+ "contentVersion": "ca268829f7a9",
+ "license": "CC BY 4.0（数据集）；内含倪海厦《天纪》引文适用 CC BY-NC-SA 4.0",
+ "topics": [
+  "overview",
+  "personality",
+  "love",
+  "career",
+  "wealth",
+  "health",
+  "family",
+  "children",
+  "move",
+  "friends",
+  "home",
+  "spirit",
+  "parents"
+ ],
+ "years": [
+  1950,
+  2026
+ ],
+ "charts": 674976,
+ "commonLines": 396610
+}
