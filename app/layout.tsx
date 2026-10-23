@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
+import ZhHantConverter from '@/components/ZhHantConverter';
 import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
@@ -18,7 +17,7 @@ export const metadata: Metadata = {
     description: '基于倪海厦正宗紫微斗数体系，AI深度解读您的命盘格局、大限流年、感情事业财富健康全方位解析',
     url: SITE_URL,
     siteName: '紫微研究',
-    locale: 'zh_CN',
+    locale: 'zh_TW',
     type: 'website',
   },
   // 站长平台验证（拿到 verification code 后填入对应字段，重新部署即可）
@@ -38,16 +37,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="zh-CN" suppressHydrationWarning>
+    <html lang="zh-Hant-TW" suppressHydrationWarning>
       <head>
+        {/* 繁体转换完成前先隐藏页面；没有 JS 时不隐藏，JS 出错时 3 秒后照常显示 */}
+        <style dangerouslySetInnerHTML={{ __html: 'html.zh-pending body{visibility:hidden}' }} />
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('zh-pending');setTimeout(function(){document.documentElement.classList.remove('zh-pending')},3000);" }} />
         <script dangerouslySetInnerHTML={{ __html: `(function(){try{var t=localStorage.getItem('ziwei-theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);else document.documentElement.setAttribute('data-theme','dark');}catch(e){}})();` }} />
       </head>
       <body className="min-h-screen">
         <ThemeProvider>
           {children}
         </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
+        <ZhHantConverter />
       </body>
     </html>
   );
