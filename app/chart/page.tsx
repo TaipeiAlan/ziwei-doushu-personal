@@ -2,9 +2,11 @@
 import { useState } from 'react';
 import BirthForm from '@/components/BirthForm';
 import ChartBoard from '@/components/ChartBoard';
+import ChartSummary from '@/components/ChartSummary';
+import StarDetailPanel from '@/components/StarDetailPanel';
 import TimeNav, { type TimeView } from '@/components/TimeNav';
 import { generateChart } from '@/lib/ziwei/algorithm';
-import type { BirthInfo, ZiweiChart, Palace } from '@/lib/ziwei/types';
+import type { BirthInfo, ZiweiChart, Palace, Star } from '@/lib/ziwei/types';
 
 /**
  * 命盘页 —— 开源版「排盘引擎 Demo」
@@ -19,6 +21,7 @@ import type { BirthInfo, ZiweiChart, Palace } from '@/lib/ziwei/types';
 export default function ChartPage() {
   const [chart, setChart] = useState<ZiweiChart | null>(null);
   const [, setSelectedPalace] = useState<Palace | null>(null);
+  const [selectedStar, setSelectedStar] = useState<{ star: Star; palace: Palace } | null>(null);
   const [view, setView] = useState<TimeView>('mingpan');
   const [liunianYear, setLiunianYear] = useState(() => new Date().getFullYear());
 
@@ -42,7 +45,7 @@ export default function ChartPage() {
     <main style={{ maxWidth: 1280, margin: '0 auto', padding: '24px 16px' }}>
       <button
         type="button"
-        onClick={() => { setChart(null); setSelectedPalace(null); }}
+        onClick={() => { setChart(null); setSelectedPalace(null); setSelectedStar(null); }}
         style={{
           marginBottom: 16, padding: '6px 14px', cursor: 'pointer',
           border: '1px solid #ccc', borderRadius: 8, background: 'transparent',
@@ -59,9 +62,27 @@ export default function ChartPage() {
         onYearChange={setLiunianYear}
       />
 
-      {/* 纯静态版本：出生资料只在浏览器里计算，不接 AI 解读接口 */}
-      <div style={{ marginTop: 16 }}>
-        <ChartBoard chart={chart} onPalaceSelect={setSelectedPalace} />
+      {/* 纯静态版本：解析全部在浏览器里由规则计算（格局识别、命宫摘要、四化、星曜说明），不接 AI 接口 */}
+      <style>{`
+        .chart-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 380px); gap: 20px; margin-top: 16px; align-items: start; }
+        @media (max-width: 1000px) { .chart-layout { grid-template-columns: minmax(0, 1fr); } }
+      `}</style>
+      <div className="chart-layout">
+        <div style={{ minWidth: 0 }}>
+          <ChartBoard
+            chart={chart}
+            onPalaceSelect={setSelectedPalace}
+            onStarSelect={(star, palace) => setSelectedStar({ star, palace })}
+          />
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 0 }}>
+          <StarDetailPanel
+            star={selectedStar?.star ?? null}
+            palaceName={selectedStar?.palace.name}
+            onClose={() => setSelectedStar(null)}
+          />
+          <ChartSummary chart={chart} />
+        </div>
       </div>
     </main>
   );
