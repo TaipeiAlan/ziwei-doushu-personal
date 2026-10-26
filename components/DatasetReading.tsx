@@ -7,6 +7,7 @@
  */
 
 import { useEffect, useState } from 'react';
+import Modal from '@/components/Modal';
 import type { ZiweiChart } from '@/lib/ziwei/types';
 import { TOPIC_LABEL, type TopicKey } from '@/lib/ziwei/db-analysis';
 import { getReading, READING_TOPICS, READING_YEAR_RANGE, type Reading } from '@/lib/reading/dataset';
@@ -46,9 +47,46 @@ function ReadingText({ text }: { text: string }) {
   );
 }
 
+function TopicChips({ topic, onPick, wrap = false }: { topic: TopicKey | null; onPick: (t: TopicKey) => void; wrap?: boolean }) {
+  return (
+    <div
+      style={{
+        display: 'flex', gap: 6, paddingBottom: wrap ? 0 : 10,
+        flexWrap: wrap ? 'wrap' : 'nowrap', overflowX: wrap ? 'visible' : 'auto',
+      }}
+    >
+      {READING_TOPICS.map(t => (
+        <button
+          key={t}
+          type="button"
+          onClick={() => onPick(t)}
+          style={{
+            flexShrink: 0, padding: '5px 12px', borderRadius: 999, fontSize: 12, cursor: 'pointer',
+            border: `1px solid ${t === topic ? 'var(--ac)' : 'var(--bdr)'}`,
+            background: t === topic ? 'rgba(184,146,42,0.12)' : 'transparent',
+            color: t === topic ? 'var(--ac)' : 'var(--tx-2)',
+          }}
+        >
+          {TOPIC_LABEL[t]}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+function MismatchNote({ dataset, ours }: { dataset: string | null; ours: string | null }) {
+  return (
+    <p style={{ fontSize: 12, color: 'var(--tx-2)', margin: '12px 0', lineHeight: 1.7 }}>
+      ⚠ 资料集记录的命宫主星为「{dataset ?? '空宫'}」，与本页排出的「{ours ?? '空宫'}」不同，解读可能对不上这张盘，请谨慎参考。
+    </p>
+  );
+}
+
 export default function DatasetReading({ chart }: { chart: ZiweiChart }) {
   const [state, setState] = useState<State>({ status: 'loading' });
   const [topic, setTopic] = useState<TopicKey>('overview');
+  // 解读全文放在弹出视窗里，页面上只留主题按钮，不必在长文里上下捲
+  const [open, setOpen] = useState(false);
   const info = chart.birthInfo;
 
   useEffect(() => {
@@ -87,34 +125,24 @@ export default function DatasetReading({ chart }: { chart: ZiweiChart }) {
 
       {state.status === 'ok' && (
         <>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
-            {READING_TOPICS.map(t => (
-              <button
-                key={t}
-                type="button"
-                onClick={() => setTopic(t)}
-                style={{
-                  padding: '5px 12px', borderRadius: 999, fontSize: 12, cursor: 'pointer',
-                  border: `1px solid ${t === topic ? 'var(--ac)' : 'var(--bdr)'}`,
-                  background: t === topic ? 'rgba(184,146,42,0.12)' : 'transparent',
-                  color: t === topic ? 'var(--ac)' : 'var(--tx-2)',
-                }}
-              >
-                {TOPIC_LABEL[t]}
-              </button>
-            ))}
-          </div>
-          {mismatch && (
-            <p style={{ fontSize: 12, color: 'var(--tx-2)', marginBottom: 12, lineHeight: 1.7 }}>
-              ⚠ 资料集记录的命宫主星为「{state.reading.mingStar ?? '空宫'}」，与本页排出的「{ourMingStar ?? '空宫'}」不同，解读可能对不上这张盘，请谨慎参考。
-            </p>
-          )}
-          <ReadingText text={state.reading.topics[topic]} />
+          <p style={{ fontSize: 12, color: 'var(--tx-3)', marginBottom: 10 }}>点主题在弹出视窗中阅读：</p>
+          <TopicChips topic={open ? topic : null} onPick={t => { setTopic(t); setOpen(true); }} wrap />
+          {mismatch && <MismatchNote dataset={state.reading.mingStar} ours={ourMingStar} />}
+          <Modal
+            open={open}
+            onClose={() => setOpen(false)}
+            title={`命盘解读 · ${TOPIC_LABEL[topic]}`}
+            toolbar={<TopicChips topic={topic} onPick={setTopic} />}
+            scrollKey={topic}
+          >
+            {mismatch && <MismatchNote dataset={state.reading.mingStar} ours={ourMingStar} />}
+            <ReadingText text={state.reading.topics[topic]} />
+          </Modal>
         </>
       )}
 
       <p style={{ fontSize: 11, color: 'var(--tx-3)', marginTop: 20, lineHeight: 1.7 }}>
-        解读内容来自 Renhuai123/ziwei-doushu 公开的解读资料集 v4.0（CC BY 4.0；其中倪海厦《天纪》引文适用 CC BY-NC-SA 4.0）。
+        解读内容来自 Renhuai123/ziwei-doushu 公开的解读资料集 v4.0（CC BY 4.0；其中《天纪》引文适用 CC BY-NC-SA 4.0）。
         查询时只会向本站下载出生年份的资料档，不会上传其他出生资料。
       </p>
     </section>
