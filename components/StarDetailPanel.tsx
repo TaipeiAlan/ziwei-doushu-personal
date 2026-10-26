@@ -255,13 +255,13 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
               </div>
             )}
 
-            {/* 倪海厦解读 */}
+            {/* 《天纪》观点 */}
             {detail && (
               <>
                 <div>
                   <div className="text-[10px] tracking-widest mb-1.5 flex items-center gap-1.5" style={{ color: 'var(--t-faint)' }}>
                     <span className="w-3 h-px inline-block" style={{ background: 'var(--t-border-acc)' }} />
-                    倪海厦老师解读
+                    《天纪》观点
                     <span className="w-3 h-px inline-block" style={{ background: 'var(--t-border-acc)' }} />
                   </div>
                   <p className="text-xs leading-relaxed" style={{ color: 'var(--t-text2)' }}>{detail.niHaixia}</p>

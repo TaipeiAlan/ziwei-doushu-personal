@@ -114,7 +114,7 @@ export default function DatasetReading({ chart }: { chart: ZiweiChart }) {
       )}
 
       <p style={{ fontSize: 11, color: 'var(--tx-3)', marginTop: 20, lineHeight: 1.7 }}>
-        解读内容来自 Renhuai123/ziwei-doushu 公开的解读资料集 v4.0（CC BY 4.0；其中倪海厦《天纪》引文适用 CC BY-NC-SA 4.0）。
+        解读内容来自 Renhuai123/ziwei-doushu 公开的解读资料集 v4.0（CC BY 4.0；其中《天纪》引文适用 CC BY-NC-SA 4.0）。
         查询时只会向本站下载出生年份的资料档，不会上传其他出生资料。
       </p>
     </section>

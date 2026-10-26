@@ -91,8 +91,8 @@ const STARS = [
 const FEATURES = [
   {
     tag: '排盘体系',
-    title: '倪海厦正宗\n紫微斗数',
-    subtitle: '非简化版，严格遵循倪海厦老师传承',
+    title: '三合派\n紫微斗数',
+    subtitle: '非简化版，按传统三合派起盘规则推演',
     points: [
       '纳音五行局起盘，不采用网络简化算法',
       '命宫逆数生时、身宫顺数生时，严格对齐教学规则',
@@ -107,18 +107,18 @@ const FEATURES = [
       '十四主星完整入宫，主星关系清楚可读',
       '辅星与煞星同屏呈现，避免关键信息缺失',
       '庙旺利陷亮度分级，快速识别强弱',
-      '点击任意主星即可查看倪海厦老师对该星的详细解读',
+      '点击任意星曜即可查看该星的特质与古书说明',
     ],
   },
   {
-    tag: 'AI 解读',
-    title: '深度解盘\n不止于算',
-    subtitle: '倪海厦体系知识库 × Claude AI',
+    tag: '命盘解读',
+    title: '十三主题\n完整解读',
+    subtitle: '离线资料集查询，出生资料不上传',
     points: [
-      '命格分析：从命宫主星出发，结合三方四正，给出全面的性格与人生格局判断',
-      '六大维度解读：事业方向、感情婚姻、财运模式、健康注意、家庭关系、子女缘分',
-      '大限流年追踪：当前10年大限重点、今年流年宫位的具体提示与行动建议',
-      '自由追问：针对你的命盘直接提问，「今年能换工作吗」「什么时候结婚运最好」',
+      '命格总览、性格、感情、事业、财富、健康、六亲等 13 个主题',
+      '依出生年份下载资料档，在浏览器里还原全文',
+      '月、日、时辰与性别都不会送出',
+      '涵盖 1950–2026 年出生的命盘',
     ],
   },
   {
@@ -127,74 +127,30 @@ const FEATURES = [
     subtitle: '从星曜组合中发现你的命中注定',
     points: [
       '自动识别11种经典格局：紫府同宫、杀破狼格、机月同梁、廉相格、武曲七杀等',
-      '辅弼夹命、日月夹命等特殊格局精准检测，并给出倪海厦体系下的标准解读',
+      '辅弼夹命、日月夹命等特殊格局精准检测，并附古书出处',
       '四化入命宫迁移宫的特殊状况自动标注，提示需关注的人生议题',
       '格局按吉凶等级分层展示，让你一目了然自己命盘中的优势与挑战',
     ],
   },
 ];
 
-// ─── 4 大学习板块（hero 后时间轴）──────────────────────────
-const SECTIONS = [
-  {
-    key: 'ziwei',
-    name: '紫微',
-    en: 'Zi Wei',
-    desc: '14 主星 · 13 宫位 · AI 解读',
-    status: 'ready' as const,
-    when: '5 月',
-    icon: '◉',  // 实心圆+内点，紫微星视觉
-    note: '',
-  },
-  {
-    key: 'tianji',
-    name: '天纪',
-    en: 'Tian Ji',
-    desc: '紫微 · 周易 · 奇门遁甲',
-    status: 'soon' as const,
-    when: '6 月',
-    icon: '⊙',  // 圆+内点（古文"日"），与 ◉ 同字宽
-    note: '',
-  },
-  {
-    key: 'diji',
-    name: '地纪',
-    en: 'Di Ji',
-    desc: '倪师未竟之业 · 后辈补注',
-    status: 'soon' as const,
-    when: '6 月',
-    icon: '⊞',  // 方+井（地/田视觉），与 ⊙ 同字宽
-    note: '遗稿研读',
-  },
-  {
-    key: 'renji',
-    name: '人纪',
-    en: 'Ren Ji',
-    desc: '内经 · 伤寒 · 金匮 · 针灸',
-    status: 'soon' as const,
-    when: '7 月',
-    icon: '⊕',  // 圆+十字（医道/阴阳调和），与 ⊙/⊞ 同字宽
-    note: '',
-  },
-];
-
-// ─── 倪海厦核心教义 ──────────────────────────────────────
+// ─── 论命要点 ──────────────────────────────────────────
 const NI_TEACHINGS = [
   {
     title: '命宫为本，三方为用',
-    body: '倪师始终强调，看命必先看命宫。命宫主星决定一个人的基本格局与天生性格，三方（财帛、官禄、迁移）则决定此人的「用武之地」。四宫联动才是完整的人生图景。',
+    body: '看命必先看命宫。命宫主星决定一个人的基本格局与天生性格，三方（财帛、官禄、迁移）则决定此人的「用武之地」。四宫联动才是完整的人生图景。',
   },
   {
     title: '对宫借星，不可忽视',
-    body: '倪师的独到之处在于重视「对宫」。任何宫位若为空宫，必须借对宫星曜来论断，命宫的对面是迁移宫，两者互相影响，这是很多初学者容易忽略的关键。',
+    body: '论命须重视「对宫」。任何宫位若为空宫，必须借对宫星曜来论断，命宫的对面是迁移宫，两者互相影响，这是很多初学者容易忽略的关键。',
   },
   {
     title: '四化才是命运的手',
-    body: '星曜只是基础，四化（化禄、化权、化科、化忌）才是决定运势好坏的关键。同一颗星，有化禄与有化忌，人生轨迹可以截然不同。倪师反复强调：不看四化，命盘只解了一半。',
+    body: '星曜只是基础，四化（化禄、化权、化科、化忌）才是决定运势好坏的关键。同一颗星，有化禄与有化忌，人生轨迹可以截然不同。不看四化，命盘只解了一半。',
   },
   {
     title: '大限十年，运势有节',
-    body: '倪师将人生划分为12个大限，每个大限10年。他认为人在不同的大限宫位，际遇完全不同。了解自己现在走的是哪个大限、该宫位有何星曜，才能真正把握当下的运势。',
+    body: '人生划分为12个大限，每个大限10年。人在不同的大限宫位，际遇完全不同。了解自己现在走的是哪个大限、该宫位有何星曜，才能真正把握当下的运势。',
   },
 ];
 
@@ -300,7 +256,7 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
           })}
         </div>
         <p className="text-[10px] tracking-widest transition-colors duration-300"
-          style={{ color: c.textFaint }}>倪海厦排盘法</p>
+          style={{ color: c.textFaint }}>三合派排盘法</p>
       </div>
     );
   }
@@ -378,9 +334,9 @@ function FeatureVisual({ index, colors: c }: { index: number; colors: ReturnType
 
   if (index === 2) {
     const msgs = [
-      { role: 'user', text: '我今年的事业运势如何？' },
-      { role: 'ai', text: '命宫天机化禄，今年大限走官禄宫，三方有左辅相助，事业有贵人提携，适合主动拓展…' },
-      { role: 'user', text: '什么时候感情运最好？' },
+      { role: 'user', text: '命格总览 · 性格特质 · 感情婚姻' },
+      { role: 'ai', text: '你天生会分析、也会表达。你心思细、看得准，能把复杂的事几句话说清楚…' },
+      { role: 'user', text: '事业职业 · 财富运势 · 健康状况' },
     ];
     return (
       <div className="flex flex-col gap-2 h-full justify-center">
@@ -489,13 +445,6 @@ export default function HomePage() {
           <ThemeToggle />
           <motion.button
             whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
-            onClick={() => router.push('/heming')}
-            className="text-[11px] sm:text-xs px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full transition-all duration-300"
-            style={{ border: `1px solid ${c.navBorder}`, color: c.textMuted }}>
-            合盘
-          </motion.button>
-          <motion.button
-            whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/chart')}
             className="text-[11px] sm:text-xs px-2.5 sm:px-4 py-1 sm:py-1.5 rounded-full transition-all duration-300"
             style={{ border: `1px solid ${c.goldLine}`, color: c.goldSolid }}>
@@ -513,7 +462,7 @@ export default function HomePage() {
             className="flex items-center justify-center gap-3 mb-8">
             <div className="h-px w-12" style={{ background: `linear-gradient(to right, transparent, ${c.goldLine})` }} />
             <span className="text-[11px] tracking-[0.45em] transition-colors duration-300" style={{ color: c.tagText }}>
-              紫微斗数 · 倪海厦体系
+              紫微斗数 · 三合派
             </span>
             <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${c.goldLine})` }} />
           </motion.div>
@@ -536,19 +485,19 @@ export default function HomePage() {
             transition={{ duration: 0.7, delay: 0.45 }}
             className="text-base md:text-lg tracking-[0.18em] mb-2"
             style={{ color: c.textSecond, fontWeight: 500 }}>
-            紫微为门 · 天地人为路 · 倪海厦为师
+            命宫为本 · 三方为用 · 四化为纲
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.55 }}
             className="text-xs md:text-sm tracking-[0.3em] mb-6"
             style={{ color: c.textMuted, opacity: 0.85 }}>
-            AI 答疑 · 知行合一
+            认识自己 · 知行合一
           </motion.p>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             transition={{ duration: 0.7, delay: 0.65 }}
             className="text-sm max-w-xl mx-auto leading-relaxed mb-10"
             style={{ color: c.textMuted }}>
-            输入出生年月日时，生成专属紫微斗数命盘 — 后续天纪、地纪、人纪学习模块陆续开放。
+            输入出生年月日时，生成专属紫微斗数命盘，并对照格局识别与十三主题解读。
           </motion.p>
 
           {/* CTA */}
@@ -578,68 +527,6 @@ export default function HomePage() {
               </motion.div>
             ))}
           </motion.div>
-        </motion.div>
-
-        {/* 上线公告便利贴 — 桌面端绝对定位右侧 */}
-        <motion.div
-          initial={{ opacity: 0, x: 30, rotate: 0 }}
-          animate={{ opacity: 1, x: 0, rotate: -4 }}
-          transition={{ delay: 1.4, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-          className="absolute hidden lg:block pointer-events-none"
-          style={{
-            right: 'clamp(2%, 6vw, 8%)',
-            top: '54%',
-            maxWidth: '240px',
-          }}
-        >
-          <div style={{
-            background: 'linear-gradient(135deg, #fff5e3 0%, #ffe1c0 100%)',
-            border: '2px dashed rgba(232,132,62,0.45)',
-            borderRadius: '16px',
-            padding: '14px 18px',
-            boxShadow: '0 8px 24px rgba(196,90,45,0.18), 0 2px 6px rgba(196,90,45,0.1)',
-            fontFamily: '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
-          }}>
-            <div style={{ fontSize: '20px', marginBottom: '6px', lineHeight: 1 }}>🎁</div>
-            <div style={{ fontSize: '13px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
-              <span style={{ color: '#c45a2d', fontWeight: 700, fontSize: '14px' }}>5/1 — 5/8</span>
-              <span> 限时回馈</span>
-            </div>
-            <div style={{ fontSize: '13px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
-              全部功能 + AI 提问
-              <strong style={{ color: '#c45a2d' }}> 全免费</strong>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* 上线公告便利贴 — 手机端正常流式显示（hero 内容下方居中） */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0, rotate: -2 }}
-          transition={{ delay: 1.4, duration: 0.7, ease: [0.25, 0.1, 0.25, 1] }}
-          className="lg:hidden mx-auto mt-8 mb-2 pointer-events-none"
-          style={{
-            maxWidth: 'min(280px, 84vw)',
-          }}
-        >
-          <div style={{
-            background: 'linear-gradient(135deg, #fff5e3 0%, #ffe1c0 100%)',
-            border: '2px dashed rgba(232,132,62,0.45)',
-            borderRadius: '14px',
-            padding: '12px 16px',
-            boxShadow: '0 6px 18px rgba(196,90,45,0.16), 0 2px 4px rgba(196,90,45,0.08)',
-            fontFamily: '"PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif',
-            textAlign: 'center',
-          }}>
-            <div style={{ fontSize: '18px', marginBottom: '4px', lineHeight: 1 }}>🎁</div>
-            <div style={{ fontSize: '12px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
-              <span style={{ color: '#c45a2d', fontWeight: 700, fontSize: '13px' }}>5/1 — 5/8</span>
-              <span> 限时回馈</span>
-            </div>
-            <div style={{ fontSize: '12px', lineHeight: 1.7, color: '#8b3a1a', fontWeight: 500 }}>
-              全部功能 + AI <strong style={{ color: '#c45a2d' }}>全免费</strong>
-            </div>
-          </div>
         </motion.div>
 
         {/* 滚动提示（绝对定位，不影响 hero opacity 计算） */}
@@ -693,118 +580,6 @@ export default function HomePage() {
             </motion.p>
           </div>
         </FadeIn>
-      </section>
-
-      {/* ══ 4 大学习板块时间轴 ════════════════════════════ */}
-      <section className="relative z-10 py-20 lg:py-24 px-6"
-        style={{
-          background: theme === 'dark'
-            ? 'linear-gradient(to bottom, transparent 0%, rgba(184,146,42,0.03) 50%, transparent 100%)'
-            : 'linear-gradient(to bottom, transparent 0%, rgba(184,146,42,0.04) 50%, transparent 100%)',
-        }}>
-        <FadeIn className="text-center mb-14">
-          <div className="flex items-center justify-center gap-3 mb-3">
-            <div className="h-px w-12" style={{ background: `linear-gradient(to right, transparent, ${c.goldLine})` }} />
-            <span className="text-[10px] tracking-[0.4em] uppercase" style={{ color: c.goldSolid, opacity: 0.7 }}>Curriculum</span>
-            <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${c.goldLine})` }} />
-          </div>
-          <div className="text-2xl lg:text-3xl font-bold mb-2 tracking-[0.15em]" style={{ color: c.textPrimary }}>
-            倪师方法论 · 渐次展开
-          </div>
-          <div className="text-xs lg:text-sm tracking-[0.1em]" style={{ color: c.textMuted }}>
-            从紫微入门，逐步开放天纪 / 地纪 / 人纪学习模块
-          </div>
-        </FadeIn>
-
-        <div className="max-w-sm lg:max-w-5xl mx-auto relative">
-          {/* 横向连接线（仅桌面）*/}
-          <div className="hidden lg:block absolute top-7 left-[12.5%] right-[12.5%] h-0.5"
-            style={{
-              background: `linear-gradient(90deg, ${c.goldSolid} 0%, ${c.goldSolid} 25%, ${c.goldLine} 25%)`,
-              opacity: 0.6,
-            }} />
-
-          {/* 纵向连接线（仅手机）—— 圆点贴在线上，做"地铁线路图"风格 */}
-          <div className="lg:hidden absolute left-7 top-7 bottom-7 w-px -translate-x-1/2"
-            style={{
-              background: `linear-gradient(180deg, ${c.goldSolid} 0%, ${c.goldSolid} 22%, ${c.goldLine} 22%)`,
-              opacity: 0.6,
-            }} />
-
-          <div className="flex flex-col gap-5 lg:grid lg:grid-cols-4 lg:gap-4">
-            {SECTIONS.map((s, i) => {
-              const ready = s.status === 'ready';
-              return (
-                <motion.div key={s.key}
-                  initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.15, duration: 0.5 }}
-                  viewport={{ once: true }}
-                  className="relative flex flex-row lg:flex-col items-center lg:items-center text-left lg:text-center gap-4 lg:gap-0">
-                  {/* 节点圆 */}
-                  <div className="relative w-14 h-14 shrink-0 rounded-full flex items-center justify-center lg:mb-3"
-                    style={{
-                      background: ready
-                        ? `linear-gradient(135deg, ${c.goldSolid} 0%, ${c.goldSolid}cc 100%)`
-                        : (theme === 'dark' ? 'rgba(184,146,42,0.05)' : '#fdf8ee'),
-                      border: ready ? 'none' : `2px dashed ${c.goldLine}`,
-                      color: ready ? '#fff' : c.textMuted,
-                      boxShadow: ready ? `0 4px 16px ${c.goldSolid}55` : 'none',
-                    }}>
-                    <span className="text-2xl">{s.icon}</span>
-                    {ready && (
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] text-white"
-                        style={{ background: '#10b981', boxShadow: '0 2px 6px rgba(16,185,129,0.4)' }}>
-                        ✓
-                      </div>
-                    )}
-                  </div>
-                  {/* 文字组：手机端右排单列；桌面端居中堆叠 */}
-                  <div className="flex-1 lg:flex-none flex flex-col items-start lg:items-center min-w-0">
-                    {/* 顶行：时间标签 + 板块名 + note（手机端 inline；桌面端依然分行） */}
-                    <div className="flex items-baseline gap-2 lg:flex-col lg:gap-0 lg:mb-1">
-                      <div className="text-[10px] tracking-[0.25em] lg:mb-1.5"
-                        style={{ color: ready ? '#10b981' : c.textMuted, fontWeight: 500 }}>
-                        {s.when}
-                      </div>
-                      <div className="text-base lg:text-xl font-semibold tracking-[0.15em]"
-                        style={{ color: c.textPrimary }}>
-                        {s.name}
-                      </div>
-                      {s.note && (
-                        <div className="text-[9px] tracking-[0.15em] px-2 py-0.5 rounded-full lg:hidden"
-                          style={{
-                            color: c.goldSolid,
-                            background: theme === 'dark' ? 'rgba(184,146,42,0.1)' : 'rgba(184,146,42,0.08)',
-                            border: `1px solid ${c.goldLine}`,
-                            opacity: 0.85,
-                          }}>
-                          {s.note}
-                        </div>
-                      )}
-                    </div>
-                    {/* 桌面专属 note（手机已在顶行 inline 展示）*/}
-                    {s.note && (
-                      <div className="hidden lg:block text-[9px] tracking-[0.15em] mb-1.5 px-2 py-0.5 rounded-full"
-                        style={{
-                          color: c.goldSolid,
-                          background: theme === 'dark' ? 'rgba(184,146,42,0.1)' : 'rgba(184,146,42,0.08)',
-                          border: `1px solid ${c.goldLine}`,
-                          opacity: 0.85,
-                        }}>
-                        {s.note}
-                      </div>
-                    )}
-                    {/* 简介 */}
-                    <div className="text-[11px] lg:text-xs leading-relaxed lg:max-w-[200px] mt-0.5 lg:mt-0"
-                      style={{ color: c.textSecond }}>
-                      {s.desc}
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
       </section>
 
       {/* ══ 功能详解 ══════════════════════════════════════ */}
@@ -875,7 +650,7 @@ export default function HomePage() {
             <div className="text-center mb-10">
               <div className="flex items-center justify-center gap-3 mb-6">
                 <div className="h-px w-12" style={{ background: `linear-gradient(to right, transparent, ${c.goldLine})` }} />
-                <span className="text-[10px] tracking-[0.5em] uppercase" style={{ color: c.tagText }}>Ni Haixia · Philosophy</span>
+                <span className="text-[10px] tracking-[0.5em] uppercase" style={{ color: c.tagText }}>Philosophy</span>
                 <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${c.goldLine})` }} />
               </div>
               <h2 className={`grad-text ${theme === 'dark' ? 'grad-text-dark' : 'grad-text-light'} font-bold mb-5 tracking-tight`}
@@ -883,8 +658,8 @@ export default function HomePage() {
                 天 · 地 · 人
               </h2>
               <p className="max-w-2xl mx-auto text-sm leading-relaxed" style={{ color: c.textSecond }}>
-                倪海厦老师的核心命运观：命运从来不是人生的全部。<br />
-                他将影响人生的力量分为三个同等重要的维度。
+                传统命理的命运观：命运从来不是人生的全部。<br />
+                影响人生的力量，可分为三个同等重要的维度。
               </p>
             </div>
           </FadeIn>
@@ -892,7 +667,7 @@ export default function HomePage() {
             {[
               { glyph: '天', label: '先天命运', pct: '⅓', color: c.goldSolid, borderColor: c.goldLine, desc: '紫微斗数所揭示的，是一个人的先天命盘格局——出生时间决定的星曜布局、五行局数、命宫主星。这只是命运的三分之一，是人生的底色，而非全貌。', sub: '命盘 · 星曜 · 五行' },
               { glyph: '地', label: '地理环境', pct: '⅓', color: 'rgba(96,165,250,0.9)', borderColor: 'rgba(96,165,250,0.3)', desc: '你所在的地理环境、城市、国家、风水格局，乃至家庭背景与社会结构，共同构成了命运的第二个维度。同一命盘，生在不同地方，际遇可以天壤之别。', sub: '地域 · 风水 · 环境' },
-              { glyph: '人', label: '人心意念', pct: '⅓', color: 'rgba(100,216,139,0.9)', borderColor: 'rgba(100,216,139,0.3)', desc: '个人的意志、心态、选择与行动，才是改变命运最主动的力量。倪师强调：了解命盘是为了更好地做人，而不是坐等命运安排。精进自己，是最强的破局之道。', sub: '意志 · 选择 · 行动' },
+              { glyph: '人', label: '人心意念', pct: '⅓', color: 'rgba(100,216,139,0.9)', borderColor: 'rgba(100,216,139,0.3)', desc: '个人的意志、心态、选择与行动，才是改变命运最主动的力量。了解命盘是为了更好地做人，而不是坐等命运安排。精进自己，是最强的破局之道。', sub: '意志 · 选择 · 行动' },
             ].map((item, i) => (
               <FadeIn key={item.glyph} delay={0.1 + i * 0.12}>
                 <motion.div whileHover={{ y: -4 }} transition={{ duration: 0.1 }}
@@ -920,13 +695,13 @@ export default function HomePage() {
               <p className="text-sm leading-relaxed" style={{ color: c.textSecond }}>
                 「命运不是人生的全部，加上地理位置和人念，才是。」
               </p>
-              <p className="mt-2 text-[10px] tracking-widest" style={{ color: c.tagText }}>— 倪海厦</p>
+              <p className="mt-2 text-[10px] tracking-widest" style={{ color: c.tagText }}>— 《天纪》</p>
             </div>
           </FadeIn>
         </div>
       </section>
 
-      {/* ══ 倪海厦介绍 ════════════════════════════════════ */}
+      {/* ══ 论命要点 ══════════════════════════════════════ */}
       <section className="relative z-10 flex items-center px-6 md:px-10 lg:px-14 py-20" style={{ minHeight: '82svh' }}>
         <WeakBoundary line={c.navBorder} />
         <div className="mx-auto w-full" style={{ maxWidth: '1280px' }}>
@@ -934,74 +709,13 @@ export default function HomePage() {
             <div className="text-center mb-10">
               <div className="flex items-center justify-center gap-3 mb-6">
                 <div className="h-px w-12" style={{ background: `linear-gradient(to right, transparent, ${c.goldLine})` }} />
-                <span className="text-[10px] tracking-[0.5em] uppercase" style={{ color: c.tagText }}>Master · 1953 – 2012</span>
+                <span className="text-[10px] tracking-[0.5em] uppercase" style={{ color: c.tagText }}>Method</span>
                 <div className="h-px w-12" style={{ background: `linear-gradient(to left, transparent, ${c.goldLine})` }} />
               </div>
               <h2 className={`grad-text ${theme === 'dark' ? 'grad-text-dark' : 'grad-text-light'} font-bold mb-6 tracking-tight`}
                 style={{ fontSize: 'clamp(32px, 4vw, 48px)' }}>
-                倪海厦老师
+                论命要点
               </h2>
-              <p className="max-w-2xl mx-auto leading-relaxed text-sm" style={{ color: c.textSecond }}>
-                当代华人圈最具影响力的中医与术数大家之一<br />
-                美国汉唐中医学院创办人 ·「人纪」「天纪」两大教学体系传世
-              </p>
-            </div>
-          </FadeIn>
-
-          <FadeIn delay={0.1}>
-            <div className="rounded-2xl p-8 md:p-10 mb-8"
-              style={{ border: `1px solid ${c.niBorder}`, background: c.niBg, boxShadow: c.cardShadow }}>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                {[
-                  { label: '生于', value: '1954年', sub: '台湾' },
-                  { label: '离世', value: '2012年', sub: '1月31日 · 享年58' },
-                  { label: '传承', value: '紫微斗数', sub: '经方中医 · 易经' },
-                ].map(item => (
-                  <div key={item.label} className="text-center rounded-xl px-4 py-3"
-                    style={{ border: `1px solid ${c.niDivider}`, background: 'rgba(255,255,255,0.02)' }}>
-                    <div className="text-[10px] tracking-[0.3em] mb-1" style={{ color: c.textFaint }}>{item.label}</div>
-                    <div className="text-2xl font-semibold mb-0.5" style={{ color: c.goldSolid }}>{item.value}</div>
-                    <div className="text-[11px]" style={{ color: c.textMuted }}>{item.sub}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="h-px mb-8" style={{ background: c.niDivider }} />
-              <div className="space-y-4 text-sm leading-relaxed max-w-3xl mx-auto" style={{ color: c.textSecond }}>
-                <p>
-                  <strong style={{ color: c.goldSolid }}>生平履历</strong>：
-                  倪海厦先生（1954–2012）出生于台湾，早年师承多位中医名家，专研经方派（《伤寒论》传承）。
-                  中年赴美行医，在美国创立<strong>汉唐中医学院</strong>，二十余年间系统传授中医与传统术数。
-                  2012 年 1 月 31 日因肝癌在台湾离世，享年 58 岁。
-                </p>
-                <p>
-                  <strong style={{ color: c.goldSolid }}>教学体系</strong>：
-                  倪师将毕生所学整理为两大公开教学系列。
-                  <strong>「人纪」</strong>涵盖《针灸大成》《神农本草经》《黄帝内经》《伤寒论》《金匮要略》——
-                  这是「人之纪」，奠定中医学习的完整路径；
-                  <strong>「天纪」</strong>涵盖紫微斗数与《易经》——这是「天之纪」，是术数研究的体系化成果。
-                  两者相合，是倪师留给后世最完整的传承。
-                </p>
-                <p>
-                  <strong style={{ color: c.goldSolid }}>紫微立场</strong>：
-                  倪师在紫微斗数上明确属<strong>南派三合派</strong>，主张「以命宫为本、以三方四正为用、以四化为纲」。
-                  他在《天纪》课程中明言：「<em>飞星（四化）飞来飞去太复杂，不搞这个，毕竟大道至简</em>」——
-                  这一立场将其与繁琐的飞星派清晰区分。
-                </p>
-                <p>
-                  <strong style={{ color: c.goldSolid }}>治学态度</strong>：
-                  倪师反对死记硬背口诀，强调「理解原理胜过背诵」「逻辑可复核胜过神秘玄学」。
-                  这种态度让紫微斗数从师徒密传的封闭体系，走向系统化、可验证、可学习的现代知识体系。
-                </p>
-                <p>
-                  <strong style={{ color: c.goldSolid }}>当代影响</strong>：
-                  倪师的讲课视频在 B 站、YouTube 与各大平台广泛流传，是新一代命理与中医爱好者公认的入门必修。
-                  他不仅是紫微斗数的传承者，更是把传统命理与中医带入现代知识体系的关键人物之一。
-                </p>
-                <p style={{ fontSize: '11px', color: c.textMuted, fontStyle: 'italic', marginTop: '12px' }}>
-                  本平台所有解读基于倪师《天纪》公开教学讲义、《紫微斗数全书》明版、传统三合派古籍整理而成，
-                  仅作文化与个人成长参考。倪师本人与本平台无任何商业关联。
-                </p>
-              </div>
             </div>
           </FadeIn>
 
@@ -1026,58 +740,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ══ 合盘入口 ══════════════════════════════════════ */}
-      <section className="relative z-10 px-6 md:px-10 lg:px-14 py-20">
-        <div className="mx-auto" style={{ maxWidth: '1280px' }}>
-          <div className="rounded-2xl p-10 md:p-14 text-center"
-            style={{
-              background: theme === 'dark' ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.8)',
-              border: `1px solid ${c.cardBorder}`,
-              boxShadow: c.cardShadow,
-            }}>
-            <FadeIn>
-              <div className="flex items-center justify-center gap-3 mb-6">
-                <div className="h-px w-8" style={{ background: c.goldLine }} />
-                <span className="text-[10px] tracking-[0.5em] uppercase" style={{ color: c.tagText }}>Compatibility · Analysis</span>
-                <div className="h-px w-8" style={{ background: c.goldLine }} />
-              </div>
-              <h2 className={`grad-text ${theme === 'dark' ? 'grad-text-dark' : 'grad-text-light'} font-bold mb-4 tracking-tight`}
-                style={{ fontSize: 'clamp(26px, 3.5vw, 40px)' }}>
-                紫微合盘
-              </h2>
-              <p className="text-sm leading-relaxed mb-8 max-w-lg mx-auto" style={{ color: c.textSecond }}>
-                输入两个人的出生信息，AI 基于倪海厦体系分析夫妻宫互参、命宫兼容性与三方四正交互，<br className="hidden md:block" />
-                给出感情匹配度、合伙可行性与最佳相处建议。
-              </p>
-              <div className="flex justify-center gap-3 flex-wrap mb-6">
-                {['感情匹配度分析', '合伙创业评估', '亲子缘分解读', '婚前相性评估'].map(item => (
-                  <span key={item} style={{
-                    fontSize: '12px', padding: '5px 14px', borderRadius: '20px',
-                    background: theme === 'dark' ? 'rgba(212,168,67,0.08)' : 'rgba(212,168,67,0.12)',
-                    border: `1px solid ${c.goldLine}`,
-                    color: c.goldSolid,
-                  }}>
-                    {item}
-                  </span>
-                ))}
-              </div>
-              <motion.button
-                whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
-                onClick={() => router.push('/heming')}
-                className="px-10 py-3 font-medium text-sm tracking-widest rounded-full"
-                style={{
-                  background: theme === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(140,100,20,0.1)',
-                  border: `1px solid ${c.goldLine}`,
-                  color: c.goldSolid,
-                  cursor: 'pointer',
-                }}>
-                开始合盘分析
-              </motion.button>
-            </FadeIn>
-          </div>
-        </div>
-      </section>
-
       {/* ══ 最终 CTA ══════════════════════════════════════ */}
       <section className="relative z-10 py-40 px-6 text-center" style={{ background: c.altSection }}>
         <FadeIn>
@@ -1088,19 +750,18 @@ export default function HomePage() {
           </h2>
           <p className="text-sm mb-10 max-w-md mx-auto leading-relaxed" style={{ color: c.textSecond }}>
             输入出生年月日时，在几秒内生成你的专属命盘<br />
-            再由 AI 按倪海厦体系为你深度解读
+            并对照格局识别与十三主题解读
           </p>
           <motion.button
             whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }}
             onClick={() => router.push('/chart')}
             className="px-14 py-4 font-semibold text-base tracking-widest rounded-full"
             style={{ background: c.ctaBg, color: c.ctaText }}>
-            免费起盘
+            开始起盘
           </motion.button>
           <div className="mt-4 flex flex-wrap gap-3 justify-center">
-            <motion.a
+            <Link
               href="/knowledge"
-              whileHover={{ scale: 1.02 }}
               className="text-xs tracking-[0.2em] inline-flex items-center gap-2 px-4 py-2 rounded-full"
               style={{
                 color: c.goldSolid,
@@ -1109,10 +770,9 @@ export default function HomePage() {
                 textDecoration: 'none',
               }}>
               ✦ 紫微斗数知识库 →
-            </motion.a>
-            <motion.a
+            </Link>
+            <Link
               href="/library"
-              whileHover={{ scale: 1.02 }}
               className="text-xs tracking-[0.2em] inline-flex items-center gap-2 px-4 py-2 rounded-full"
               style={{
                 color: c.goldSolid,
@@ -1121,7 +781,7 @@ export default function HomePage() {
                 textDecoration: 'none',
               }}>
               📜 古籍原典库 →
-            </motion.a>
+            </Link>
           </div>
         </FadeIn>
       </section>
@@ -1130,51 +790,19 @@ export default function HomePage() {
       <footer className="relative z-10 py-10 px-6"
         style={{ borderTop: `1px solid ${c.niCardBord}` }}>
 
-        {/* 4 板块导航占位（已上线 + 即将开放）*/}
-        <div className="max-w-4xl mx-auto mb-8">
-          <div className="text-[9px] tracking-[0.3em] text-center mb-4 uppercase"
-            style={{ color: c.textMuted, opacity: 0.6 }}>
-            倪师方法论 · 学术体系
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-            {SECTIONS.map(s => {
-              const ready = s.status === 'ready';
-              return (
-                <a
-                  key={s.key}
-                  href={ready ? '/chart' : undefined}
-                  onClick={ready ? undefined : (e) => e.preventDefault()}
-                  className="rounded-lg px-3 py-3 text-center transition-all"
-                  style={{
-                    background: ready ? c.starBg : 'transparent',
-                    border: `1px ${ready ? 'solid' : 'dashed'} ${ready ? c.goldLine : c.navBorder}`,
-                    cursor: ready ? 'pointer' : 'not-allowed',
-                    opacity: ready ? 1 : 0.5,
-                    textDecoration: 'none',
-                  }}
-                >
-                  <div className="text-base font-semibold mb-0.5 tracking-[0.1em]"
-                    style={{ color: ready ? c.goldSolid : c.textMuted }}>
-                    {s.name}
-                  </div>
-                  <div className="text-[9px] tracking-wider"
-                    style={{ color: ready ? '#10b981' : c.textMuted }}>
-                    {ready ? '✓ 已上线' : `${s.when} 开放`}
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-
         <div className="text-center">
           <p className="text-[10px] tracking-wider mb-3" style={{ color: c.footerText }}>
-            紫微命盘 · 基于倪海厦正宗体系 · 仅供参考，命运掌握在自己手中
+            紫微命盘 · 仅供参考，命运掌握在自己手中
           </p>
           <p className="text-[10px] tracking-wider mb-3 max-w-2xl mx-auto leading-relaxed"
             style={{ color: c.footerText, opacity: 0.85 }}>
             本平台基于中国传统文化研究，仅提供学习参考。<br className="sm:hidden" />
             不构成任何医疗、投资、法律或重大决策建议。
+          </p>
+          <p className="text-[10px] tracking-wider mb-3 max-w-2xl mx-auto leading-relaxed"
+            style={{ color: c.footerText, opacity: 0.7 }}>
+            排盘规则与解读参考倪海厦先生《天纪》公开教学及《紫微斗数全书》等古籍整理；
+            本站为个人学习用途，与倪海厦先生及其家属、汉唐中医均无关联。
           </p>
           <p className="text-[10px] tracking-wider" style={{ color: c.footerText }}>
             <Link href="/terms" style={{ color: c.footerText, textDecoration: 'underline' }}>服务条款</Link>
