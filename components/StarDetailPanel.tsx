@@ -209,7 +209,7 @@ export default function StarDetailPanel({ star, palaceName, onClose }: StarDetai
             <button onClick={onClose} className="transition-colors text-lg leading-none" style={{ color: 'var(--t-faint)' }}>×</button>
           </div>
 
-          <div className="p-4 space-y-4 overflow-y-auto max-h-[560px]">
+          <div className="p-4 space-y-4 overflow-y-auto max-h-[78vh]">
             {/* 基本信息 */}
             {desc && (
               <div className="flex flex-wrap gap-1.5">
